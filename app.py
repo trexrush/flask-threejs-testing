@@ -11,7 +11,7 @@ def index():
 
 @app.route('/<name>')
 def return_name(name):
-    NUM_VARIABLES = 3
+    NUM_VARIABLES = 6
     if type(name) != int:
         name = hash(name)
     random.seed(name)
@@ -24,5 +24,5 @@ def return_name(name):
     # return "Hello, {}".format(name)
 
 
-if __name__ == "__main__": # if you use flask.run you dont need this
+if __name__ == "__main__": # if you use flask.run I think you dont need this
     app.run(debug=True)
