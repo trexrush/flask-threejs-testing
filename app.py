@@ -8,6 +8,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/threejs') # JUST FOR TESTING
+def threejs():
+    return render_template('threejstest.html')
+
 
 @app.route('/<name>')
 def seed(name):
