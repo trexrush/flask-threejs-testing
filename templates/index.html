@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<script>
+    function randomSeed() {
+        let seed = Math.random();
+        location.replace(seed.toString(10))
+    }
+</script>
 
 {% endblock %}
 
 {% block body %}
-<h1>Main Page</h1>
+<button type="button" onclick="randomSeed()">Random Page</button>
 {% endblock %}

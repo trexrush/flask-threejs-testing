@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<script>
+    function mainRedirect() {
+        location.replace('/')
+    }
+</script>
 
 {% endblock %}
 
 {% block body %}
+<button type="button" onclick="mainRedirect()">Back To Main</button>
 <h1>The seed is {{ seed[0] }}</h1>
 <h1>Some seeded values are: </h1>
     {% for i in range(seed|length) %}
