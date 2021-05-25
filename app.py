@@ -10,10 +10,9 @@ def index():
 
 
 @app.route('/<name>')
-def return_name(name):
+def seed(name):
     NUM_VARIABLES = 6
-    if type(name) != int:
-        name = hash(name)
+    name = hash(name) # incase the url has a non int, make it into an int
     random.seed(name)
     seeds = [0] * (NUM_VARIABLES + 1)
     seeds[0] = name
