@@ -8,14 +8,27 @@
 		</style>
 	</head>
 	<body>
-		<script src="https://threejs.org/build/three.js"></script>
-		<script>
-			const scene = new THREE.Scene();
-			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+		<script type="module">
+			import * as THREE from "https://threejs.org/build/three.module.js";
+			import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 
 			const renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
+
+			const scene = new THREE.Scene();
+			const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			
+			window.addEventListener( 'resize', onWindowResize, false );
+			function onWindowResize() {
+    			camera.aspect = window.innerWidth / window.innerHeight;
+    			camera.updateProjectionMatrix();
+    			renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+
+			// setup done //
+
+			const controls = new OrbitControls( camera, renderer.domElement);
 
 			const geometry = new THREE.BoxGeometry();
 			const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -27,8 +40,8 @@
 			const animate = function () {
 				requestAnimationFrame( animate );
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
+				cube.rotation.x += 0.001;
+				cube.rotation.y += 0.001;
 
 				renderer.render( scene, camera );
 			};
