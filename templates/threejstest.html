@@ -43,14 +43,14 @@
 				}
 
 				scene.background = new THREE.Color( 0x1a1a1a );
-				scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 3, 6)
+				scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
 				
 				controls = new OrbitControls( camera, renderer.domElement);
 
 				// setup done //
 
 				const geometry = new THREE.BoxGeometry(5, 5, .2);
-				const material = new THREE.MeshBasicMaterial( { color: 0xf4ff1f } ); //becdbc
+				const material = new THREE.MeshBasicMaterial( { color: 0xbecdbc } ); //becdbc //bfc908
 				cube = new THREE.Mesh( geometry, material );
 				scene.add( cube );
 
@@ -72,8 +72,8 @@
 				// cube.rotation.x += 0.001;
 				// cube.rotation.y += 0.001;
 
-				target.x += ( mouseX - target.x ) * .01;
-				target.y += ( mouseY - target.y ) * .01;
+				target.x += ( mouseX - target.x ) * .004;
+				target.y += ( mouseY - target.y ) * .004;
 				target.z = camera.position.z; // assuming the camera is located at ( 0, 0, z );
 
 				cube.lookAt( target );
