@@ -1,4 +1,5 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
+import { TrackballControls } from 'https://threejs.org/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'https://threejs.org/examples/jsm/renderers/CSS3DRenderer.js';
 import { TWEEN } from 'https://threejs.org/examples/jsm/libs/tween.module.min.js';
@@ -24,6 +25,7 @@ function init() {
 
     scene = new THREE.Scene();
     sceneCSS = new THREE.Scene();
+    sceneCSS.scale.set(.1, .1, .1);
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
     rendererWEBGL = new THREE.WebGLRenderer();
@@ -39,12 +41,12 @@ function init() {
     scene.background = new THREE.Color( 0x1a1a1a );
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
     
-    controls = new OrbitControls( camera, rendererCSS3D.domElement);
+    controls = new TrackballControls( camera, rendererCSS3D.domElement );
 
     // objects //
 
-    const geometry = new THREE.BoxGeometry(2, 2, 1);
-    const material = new THREE.MeshBasicMaterial( { color: 0x4d4d4d } ); //becdbc dont like this one //bfc908 yellow
+    const geometry = new THREE.BoxGeometry(2, 2, 2);
+    const material = new THREE.MeshBasicMaterial( { color: 0xbfc908 } ); //4d4d4d grey //bfc908 yellow
     const cube = new THREE.Mesh( geometry, material );
     scene.add(cube);
     objects.push(cube);
@@ -52,18 +54,18 @@ function init() {
     // css3d test //
 
     let element = document.createElement( 'div' );
-    // element.style.background = new THREE.Color ( 0x4d4d4d );
-    element.textContent = "a";
-    element.width = '20%';
-    element.height = '20%';
-    element.style.color = '#bfc908';
-    element.style.fontSize = '3px';
-    element.style.opacity = .2;
+    element.textContent = "hi";
+    element.width = '25%';
+    element.height = '25%';
+    element.style.color = '#1a1a1a';
+    element.style.fontSize = '12px';
+    element.style.opacity = .5;
+    element.setAttribute("class", "labeltext");
 
     const css3d = new CSS3DObject( element );
     css3d.position.x = 0;
     css3d.position.y = 0;
-    css3d.position.z = 0;
+    css3d.position.z = 15;
     sceneCSS.add(css3d);
     objects.push(css3d);
 
@@ -75,7 +77,8 @@ function init() {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    camera.position.z = 5;
+    camera.position.z = 6;
+
 }
 
 function onMouseMove(event) {
@@ -92,17 +95,26 @@ function onWindowResize() {
 
 function animate() { // animate loop
     requestAnimationFrame( animate );
+    update();
+    render();
+};
+animate();
 
+function update() {
     // cube.rotation.x += 0.001;
     // cube.rotation.y += 0.001;
 
-    target.x += ( mouseX - target.x ) * .004;
-    target.y += ( mouseY - target.y ) * .004;
-    target.z = camera.position.z; // assuming the camera is located at ( 0, 0, z );
+    target.x += ( mouseX - target.x ) * .01;
+    target.y += ( mouseY - target.y ) * .01;
+    target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
 
-    objects[0].lookAt( target );
+    //let textpos = new THREE.Vector3(objects[1].postition);
+    objects[0].lookAt(target);
+    objects[1].lookAt(target);
+    //objects[1].position.set(textpos);
+}
 
+function render() {
     rendererWEBGL.render( scene, camera );
     rendererCSS3D.render( sceneCSS, camera );
-};
-animate();
+}
