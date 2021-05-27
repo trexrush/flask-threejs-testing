@@ -3,9 +3,11 @@ import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitCo
 import { CSS3DRenderer, CSS3DObject } from 'https://threejs.org/examples/jsm/renderers/CSS3DRenderer.js';
 import { TWEEN } from 'https://threejs.org/examples/jsm/libs/tween.module.min.js';
 
-let scene, 
+let scene,
+    sceneCSS, 
     camera,
-    renderer,
+    rendererWEBGL,
+    rendererCSS3D,
     controls,
     target,
     mouseX,
@@ -21,35 +23,49 @@ function init() {
     // core THREE.js //
 
     scene = new THREE.Scene();
+    sceneCSS = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-    renderer = new CSS3DRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.getElementById('container').appendChild( renderer.domElement );
+    rendererWEBGL = new THREE.WebGLRenderer();
+    rendererWEBGL.setSize( window.innerWidth, window.innerHeight );
+    rendererWEBGL.setClearColor( 0x000000, 0 );
+    document.getElementById('webgl').appendChild( rendererWEBGL.domElement );
 
-    scene.background = new THREE.Color( 0x1a1a1a );
+    rendererCSS3D = new CSS3DRenderer();
+    rendererCSS3D.setSize( window.innerWidth, window.innerHeight );
+    rendererCSS3D.domElement.style.position = 'absolute';
+    document.getElementById('css3d').appendChild( rendererCSS3D.domElement );
+
+    // scene.background = new THREE.Color( 0x1a1a1a );
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
     
-    controls = new OrbitControls( camera, renderer.domElement);
+    controls = new OrbitControls( camera, rendererCSS3D.domElement);
 
     // objects //
 
     const geometry = new THREE.BoxGeometry(2, 2, 1);
     const material = new THREE.MeshBasicMaterial( { color: 0x4d4d4d } ); //becdbc dont like this one //bfc908 yellow
     const cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
-    objects.push( cube );
+    scene.add(cube);
+    objects.push(cube);
 
     // css3d test //
 
-    const css3d = new CSS3DObject();
-    css3d.element.
-    scene.add(css3d);
+    let element = document.createElement( 'div' );
+    // element.style.background = new THREE.Color ( 0x4d4d4d );
+    element.textContent = "a";
+    element.width = '20%';
+    element.height = '20%';
+    element.style.color = '#bfc908';
+    element.style.fontSize = '3px';
+    element.style.opacity = .2;
+
+    const css3d = new CSS3DObject( element );
+    css3d.position.x = 0;
+    css3d.position.y = 0;
+    css3d.position.z = 0;
+    sceneCSS.add(css3d);
     objects.push(css3d);
-
-
-
-
 
     // events //
 
@@ -58,11 +74,6 @@ function init() {
     mouseX = 0, mouseY = 0;
 
     window.addEventListener( 'resize', onWindowResize, false );
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
 
     camera.position.z = 5;
 }
@@ -70,6 +81,13 @@ function init() {
 function onMouseMove(event) {
     mouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
+
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    rendererWEBGL.setSize(window.innerWidth, window.innerHeight);
+    rendererCSS3D.setSize(window.innerWidth, window.innerHeight);
 }
 
 function animate() { // animate loop
@@ -84,6 +102,7 @@ function animate() { // animate loop
 
     objects[0].lookAt( target );
 
-    renderer.render( scene, camera );
+    rendererWEBGL.render( scene, camera );
+    rendererCSS3D.render( sceneCSS, camera );
 };
 animate();
