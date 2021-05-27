@@ -1,6 +1,12 @@
-# intellij
+# intellij / npm / vscode
 .idea
 .vscode
+node_modules
+package-lock.json
+package.json
+
+# for now, until we switch to using local js files
+js
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
