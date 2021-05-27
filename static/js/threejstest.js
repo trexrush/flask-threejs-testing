@@ -36,7 +36,7 @@ function init() {
     rendererCSS3D.domElement.style.position = 'absolute';
     document.getElementById('css3d').appendChild( rendererCSS3D.domElement );
 
-    // scene.background = new THREE.Color( 0x1a1a1a );
+    scene.background = new THREE.Color( 0x1a1a1a );
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
     
     controls = new OrbitControls( camera, rendererCSS3D.domElement);
