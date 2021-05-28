@@ -4,7 +4,10 @@
 <script>
     function randomSeed() {
         let seed = Math.random();
-        location.replace(seed.toString(10))
+        location.replace(seed.toString(10));
+    }
+    function threejsredirect() {
+        location.href = '/threejs';
     }
 </script>
 
@@ -12,4 +15,5 @@
 
 {% block body %}
 <button type="button" onclick="randomSeed()">Random Page</button>
+<button type="button" onclick="threejsredirect()">Testing Page for THREE.js</button>
 {% endblock %}
