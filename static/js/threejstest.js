@@ -63,7 +63,8 @@ function init() {
     element.setAttribute("class", "labeltext");
 
     const css3d = new CSS3DObject( element );
-    css3d.applyMatrix4( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
+    //css3d.applyMatrix4( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
+    css3d.scale.set(-1,1,1);
     css3d.position.x = 0;
     css3d.position.y = 0;
     css3d.position.z = 15;
