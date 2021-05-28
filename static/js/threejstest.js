@@ -15,7 +15,7 @@ let scene,
     mouseY;
 
 const objects = [];
-
+const cssScale = 10 // scaling factor for html/css elements
 init();
 animate();
 
@@ -25,7 +25,7 @@ function init() {
 
     scene = new THREE.Scene();
     sceneCSS = new THREE.Scene();
-    sceneCSS.scale.set(.1, .1, .1);
+    sceneCSS.scale.set(1/cssScale, 1/cssScale, 1/cssScale);
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
     rendererWEBGL = new THREE.WebGLRenderer();
@@ -41,7 +41,7 @@ function init() {
     scene.background = new THREE.Color( 0x1a1a1a );
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
     
-    controls = new TrackballControls( camera, rendererCSS3D.domElement );
+    controls = new OrbitControls( camera, rendererCSS3D.domElement );
 
     // objects //
 
@@ -63,11 +63,19 @@ function init() {
     element.setAttribute("class", "labeltext");
 
     const css3d = new CSS3DObject( element );
+    css3d.applyMatrix4( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
     css3d.position.x = 0;
     css3d.position.y = 0;
     css3d.position.z = 15;
     sceneCSS.add(css3d);
     objects.push(css3d);
+
+    const geometry2 = new THREE.BoxGeometry(1,1,1);
+    const material2 = new THREE.MeshBasicMaterial( { color: 0x009900 } ); //4d4d4d grey //bfc908 yellow
+    const cube2 = new THREE.Mesh( geometry2, material2 );
+    cube2.position.x = 3;
+    scene.add(cube2);
+    objects.push(cube2);
 
     // events //
 
@@ -93,6 +101,20 @@ function onWindowResize() {
     rendererCSS3D.setSize(window.innerWidth, window.innerHeight);
 }
 
+function affixtext(textObj, blockObj) {
+
+    // get 2 corner coords for surface of block + get midpoint
+    let transformMatrix = blockObj.matrix;
+    let z = blockObj.geometry.parameters.depth;
+    
+    textObj.position.set(0,0,(z / 2) * cssScale);
+    textObj.position.applyMatrix4(transformMatrix);
+    textObj.lookAt(blockObj.position);
+    textObj.position
+
+    // console.log(vertex);
+}
+
 function animate() { // animate loop
     requestAnimationFrame( animate );
     update();
@@ -108,10 +130,8 @@ function update() {
     target.y += ( mouseY - target.y ) * .01;
     target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
 
-    //let textpos = new THREE.Vector3(objects[1].postition);
     objects[0].lookAt(target);
-    objects[1].lookAt(target);
-    //objects[1].position.set(textpos);
+    affixtext(objects[1], objects[0]);
 }
 
 function render() {
