@@ -69,6 +69,12 @@ function init() {
     button.onclick = function() {
         location.href = '/';
     };
+    button.onmouseover = function() {
+        button.style.color = '#ffffff';
+    }
+    button.onmouseleave = function() {
+        button.style.color = '#1a1a1a';
+    }
     element.appendChild(button);
 
     const css3d = new CSS3DObject( element );
