@@ -54,13 +54,22 @@ function init() {
     // css3d test //
 
     let element = document.createElement( 'div' );
-    element.textContent = "hi";
+    let button = document.createElement( 'button' );
+    button.innerHTML = "Click Here <br/> for homepage";
     element.width = '25%';
     element.height = '25%';
-    element.style.color = '#1a1a1a';
-    element.style.fontSize = '12px';
-    element.style.opacity = .5;
-    element.setAttribute("class", "labeltext");
+    button.style.color = '#1a1a1a';
+    button.style.fontSize = '3px';
+    button.style.opacity = .5;
+    button.style.padding = '0';
+    button.style.border = 'none'
+    button.style.background = 'none';
+    button.setAttribute("class", "labeltext");
+    button.setAttribute("type", 'button');
+    button.onclick = function() {
+        location.href = '/';
+    };
+    element.appendChild(button);
 
     const css3d = new CSS3DObject( element );
     //css3d.applyMatrix4( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
@@ -71,12 +80,14 @@ function init() {
     sceneCSS.add(css3d);
     objects.push(css3d);
 
+
+    /*
     const geometry2 = new THREE.BoxGeometry(1,1,1);
     const material2 = new THREE.MeshBasicMaterial( { color: 0x009900 } ); //4d4d4d grey //bfc908 yellow
     const cube2 = new THREE.Mesh( geometry2, material2 );
     cube2.position.x = 3;
     scene.add(cube2);
-    objects.push(cube2);
+    objects.push(cube2); */
 
     // events //
 
@@ -103,17 +114,23 @@ function onWindowResize() {
 }
 
 function affixtext(textObj, blockObj) {
-
-    // get 2 corner coords for surface of block + get midpoint
+    // get midpoint + rotation matrix of front face and move / rotate the text obj
     let transformMatrix = blockObj.matrix;
     let z = blockObj.geometry.parameters.depth;
     
     textObj.position.set(0,0,(z / 2) * cssScale);
     textObj.position.applyMatrix4(transformMatrix);
     textObj.lookAt(blockObj.position);
-    textObj.position
+}
 
-    // console.log(vertex);
+function affixlabeltext(labelObj, blockObj) {
+
+    // get midpoint of front face
+    let transformMatrix = blockObj.matrix;
+    let z = blockObj.geometry.parameters.depth;
+    
+    labelObj.position.set(0,0,(z / 2) * cssScale);
+    labelObj.position.applyMatrix4(transformMatrix);
 }
 
 function animate() { // animate loop
@@ -138,4 +155,8 @@ function update() {
 function render() {
     rendererWEBGL.render( scene, camera );
     rendererCSS3D.render( sceneCSS, camera );
+}
+
+function mainRedirect(event) {
+    // window.location.href('/threejs')
 }
