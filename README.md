@@ -4,6 +4,6 @@
  Currently it is just a sandbox of sorts but as I learn more it will become an actual project
  
  
- threejs is under static/js/threejstest.js
+ js is under static/js/threejstest.js
  
  html file is under templates/threejstest.html
