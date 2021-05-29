@@ -28,7 +28,7 @@ function init() {
     sceneCSS.scale.set(1/cssScale, 1/cssScale, 1/cssScale);
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-    rendererWEBGL = new THREE.WebGLRenderer();
+    rendererWEBGL = new THREE.WebGLRenderer( { alpha: true } );
     rendererWEBGL.setSize( window.innerWidth, window.innerHeight );
     rendererWEBGL.setClearColor( 0x000000, 0 );
     document.getElementById('webgl').appendChild( rendererWEBGL.domElement );
@@ -38,7 +38,7 @@ function init() {
     rendererCSS3D.domElement.style.position = 'absolute';
     document.getElementById('css3d').appendChild( rendererCSS3D.domElement );
 
-    scene.background = new THREE.Color( 0x1a1a1a );
+    // scene.background = new THREE.Color( 0x1a1a1a );
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
     
     controls = new OrbitControls( camera, rendererCSS3D.domElement );
@@ -51,7 +51,7 @@ function init() {
     scene.add(cube);
     objects.push(cube);
 
-    // css3d test //
+    // CSS3D elements //
 
     let element = document.createElement( 'div' );
     let button = document.createElement( 'button' );
@@ -78,7 +78,6 @@ function init() {
     element.appendChild(button);
 
     const css3d = new CSS3DObject( element );
-    //css3d.applyMatrix4( new THREE.Matrix4().makeRotationX( Math.PI / 2 ) );
     css3d.scale.set(-1,1,1);
     css3d.position.x = 0;
     css3d.position.y = 0;
@@ -86,14 +85,14 @@ function init() {
     sceneCSS.add(css3d);
     objects.push(css3d);
 
-
     /*
     const geometry2 = new THREE.BoxGeometry(1,1,1);
     const material2 = new THREE.MeshBasicMaterial( { color: 0x009900 } ); //4d4d4d grey //bfc908 yellow
     const cube2 = new THREE.Mesh( geometry2, material2 );
     cube2.position.x = 3;
     scene.add(cube2);
-    objects.push(cube2); */
+    objects.push(cube2);
+    */
 
     // events //
 

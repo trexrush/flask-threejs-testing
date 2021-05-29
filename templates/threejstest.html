@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>:WICKED:</title>
-		<style>
-			body { margin: 0; }
-		</style>
-	</head>
-	<body>
-		<div id="container">
-			<div id="css3d"></div>
-			<div id="webgl"></div>
-			<script type="module" src="../static/js/threejstest.js"></script>
-		</div>
-	</body>
-</html>
+{% extends 'base.html' %}
+
+{% block head %}
+<title>:WICKED:</title>
+{% endblock %}
+
+{% block body %}
+<div class="bg">
+	<div id="container">
+		<div id="css3d"></div>
+		<div id="webgl"></div>
+		<script type="module" src="../static/js/threejstest.js"></script>
+	</div>
+</div>
+{% endblock %}
