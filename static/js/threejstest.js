@@ -1,8 +1,19 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
+
 import { TrackballControls } from 'https://threejs.org/examples/jsm/controls/TrackballControls.js';
 import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+
 import { CSS3DRenderer, CSS3DObject } from 'https://threejs.org/examples/jsm/renderers/CSS3DRenderer.js';
 import { TWEEN } from 'https://threejs.org/examples/jsm/libs/tween.module.min.js';
+import Stats from 'https://threejs.org/examples/jsm/libs/stats.module.js';
+import { GUI } from 'https://threejs.org/examples/jsm/libs/dat.gui.module.js';
+
+import { OBJLoader } from 'https://threejs.org/examples/jsm/loaders/OBJLoader.js';
+import { EffectComposer } from 'https://threejs.org/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://threejs.org/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'https://threejs.org/examples/jsm/postprocessing/ShaderPass.js';
+import { OutlinePass } from 'https://threejs.org/examples/jsm/postprocessing/OutlinePass.js';
+import { FXAAShader } from 'https://threejs.org/examples/jsm/shaders/FXAAShader.js';
 
 let scene,
     sceneCSS, 
@@ -135,6 +146,7 @@ function affixlabeltext(labelObj, blockObj) {
     let z = blockObj.geometry.parameters.depth;
     
     labelObj.position.set(0,0,(z / 2) * cssScale);
+    labelObj.scale.set(1,1,1);
     labelObj.position.applyMatrix4(transformMatrix);
 }
 
