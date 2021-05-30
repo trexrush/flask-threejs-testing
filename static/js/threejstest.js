@@ -38,28 +38,31 @@ scene.add(cube);
 // CSS3D elements //
 
 let element = document.createElement( 'div' );
-let button = document.createElement( 'button' );
-button.innerHTML = "Click Here <br/> for homepage";
-element.width = '25%';
-element.height = '25%';
-button.style.color = '#1a1a1a';
-button.style.fontSize = '3px';
-button.style.opacity = .5;
-button.style.padding = '0';
-button.style.border = 'none'
-button.style.background = 'none';
-button.setAttribute("class", "labeltext");
-button.setAttribute("type", 'button');
-button.onclick = function() {
-    location.href = '/';
-};
-button.onmouseover = function() {
-    button.style.color = '#ffffff';
+element.setAttribute("style", "width: 20px; height: 20px; background = none; padding: 0px;"); // 20px = 10 * box value of that number
+element.innerHTML = `
+    <button type="button"
+            class="labeltext"
+            onclick="location.href = '/';"
+            style="
+                margin: auto
+                width: 50%
+                color: #1a1a1a;
+                font-size: 2px;
+                padding: 0px;
+                margin-top: -10px;
+                border: none;
+                background: none;
+                opacity: .5;
+    ">
+        Click Here</br>for homepage
+    </button>
+`;
+element.onmouseover = function() {
+    element.style.background = '#b88700';
 }
-button.onmouseleave = function() {
-    button.style.color = '#1a1a1a';
+element.onmouseleave = function() {
+    element.style.background = 'none';
 }
-element.appendChild(button);
 
 const css3d = new CSS3DObject( element );
 css3d.scale.set(-1,1,1);
@@ -81,9 +84,7 @@ camera.position.z = 6;
 animate();
 
 function init() {
-
     // core THREE.js //
-
     scene = new THREE.Scene();
     sceneCSS = new THREE.Scene();
     sceneCSS.scale.set(1/cssScale, 1/cssScale, 1/cssScale);
@@ -103,9 +104,11 @@ function init() {
     
     controls = new TrackballControls( camera, rendererCSS3D.domElement );
     controls.noZoom = true;
-    controls.panSpeed = 15;
-    controls.rotateSpeed = 15;
+    controls.panSpeed = 5;
+    controls.rotateSpeed = 5;
+    controls.dynamicDampingFactor = 0.04; // MAKE IT SO ONMOUSEDOWN THIS IS MORE, LIKE .1 or .15
 }
+
 function onMouseMove(event) {
     mouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -128,7 +131,7 @@ function affixtext(textObj, blockObj) {
     textObj.lookAt(blockObj.position);
 }
 
-function affixlabeltext(labelObj, blockObj) {
+function affixlabeltext(labelObj, blockObj) { // THIS IMPLIES NO CONTROLS CUZ IT SCREWS IT UP
 
     // get midpoint of front face
     let transformMatrix = blockObj.matrix;
@@ -136,6 +139,8 @@ function affixlabeltext(labelObj, blockObj) {
     
     labelObj.position.set(0,0,(z / 2) * cssScale);
     labelObj.scale.set(1,1,1);
+    labelObj.lookAt(camera.position);
+    // labelObj.rotation.set(camera.rotation);
     labelObj.position.applyMatrix4(transformMatrix);
 }
 
@@ -148,13 +153,11 @@ animate();
 
 function update() {
 
-    /* FOLLOW MOUSE
-    target.x += ( mouseX - target.x ) * .01;
-    target.y += ( mouseY - target.y ) * .01;
-    target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
-
-    cube.lookAt(target);
-    */
+    // target.x += ( mouseX - target.x ) * .01; // FOLLOW MOUSE
+    // target.y += ( mouseY - target.y ) * .01;
+    // target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
+    // cube.lookAt(target);
+    
 
     affixtext(css3d, cube);
     controls.update();
@@ -167,4 +170,9 @@ function render() {
 
 function mainRedirect(event) {
     // window.location.href('/threejs')
+}
+
+function resetView() {
+    camera.up = new THREE.Vector3(0,0,1);
+    camera.lookAt(new THREE.Vector3(0,0,0));
 }

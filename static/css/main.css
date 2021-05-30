@@ -12,14 +12,14 @@ body {
     --grad2: #151515;
     background: repeating-linear-gradient(45deg, var(--grad1), var(--grad1) 15px, var(--grad2) 15px, var(--grad2) 30px, var(--grad1) 30px);
 }
-/*
-#css3d, #webgl {
+
+/* #css3d, #webgl {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    /* background: #1a1a1a; 
+    background: #1a1a1a; 
 } */
 
 #container {
@@ -31,4 +31,5 @@ body {
 
 .labeltext {
     margin: 0; /* temp to prevent warnings, remove after */
+
 }
