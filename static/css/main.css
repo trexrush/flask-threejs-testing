@@ -1,3 +1,5 @@
+/* GLOBAL */
+
 body {
     margin: 0;
     font-family: sans-serif;
@@ -13,14 +15,7 @@ body {
     background: repeating-linear-gradient(45deg, var(--grad1), var(--grad1) 15px, var(--grad2) 15px, var(--grad2) 30px, var(--grad1) 30px);
 }
 
-/* #css3d, #webgl {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: #1a1a1a; 
-} */
+/* MAIN PAGE */
 
 #container {
     position: relative;
@@ -29,7 +24,21 @@ body {
     overflow: hidden;
 }
 
-.labeltext {
-    margin: 0; /* temp to prevent warnings, remove after */
-
+.cubeface {
+    width: 20px;
+    height: 20px;
+    background: none;
+    padding: 0px;
+    display: grid;
+    place-items: center;
 }
+
+.labeltext {
+    color: #1a1a1a;
+    font-size: 2px;
+    padding: 0px;
+    border: .5em solid #000000;
+    background: none;
+    /* opacity: .5; */
+}
+/* SEED */

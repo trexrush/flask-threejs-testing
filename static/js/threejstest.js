@@ -20,10 +20,7 @@ let scene,
     camera,
     rendererWEBGL,
     rendererCSS3D,
-    controls,
-    target,
-    mouseX,
-    mouseY;
+    controls;
 
 const cssScale = 10 // scaling factor for html/css elements
 init();
@@ -38,22 +35,10 @@ scene.add(cube);
 // CSS3D elements //
 
 let element = document.createElement( 'div' );
-element.setAttribute("style", "width: 20px; height: 20px; background = none; padding: 0px;"); // 20px = 10 * box value of that number
+element.setAttribute("class", "cubeface"); // 20px = 10 * box value of that number
 element.innerHTML = `
-    <button type="button"
-            class="labeltext"
-            onclick="location.href = '/';"
-            style="
-                margin: auto
-                width: 50%
-                color: #1a1a1a;
-                font-size: 2px;
-                padding: 0px;
-                margin-top: -10px;
-                border: none;
-                background: none;
-                opacity: .5;
-    ">
+    <button type="button" class="labeltext"
+            onclick="location.href = '/';">
         Click Here</br>for homepage
     </button>
 `;
@@ -74,8 +59,9 @@ sceneCSS.add(css3d);
 // events //
 
 document.addEventListener('mousemove', onMouseMove, false);
-target = new THREE.Vector3();
-mouseX = 0, mouseY = 0;
+let target = new THREE.Vector3();
+let mouseX = 0;
+let mouseY = 0;
 
 window.addEventListener( 'resize', onWindowResize, false );
 
