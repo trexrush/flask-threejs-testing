@@ -1,0 +1,26 @@
+/* MAIN PAGE */
+
+#container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.htmlplate { 
+    width: 100px; /* MANUALLY SET THIS IN JS */
+    height: 100px; /* MANUALLY SET THIS IN JS */
+    background: none;
+    padding: 0px;
+    display: grid;
+    place-items: center;
+}
+
+.html {
+    color: #1a1a1a;
+    font-size: 12px;
+    padding: 0px;
+    border: .5em solid #000000;
+    background: none;
+    /* opacity: .5; */
+}

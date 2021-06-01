@@ -20,25 +20,25 @@ let scene,
     camera,
     rendererWEBGL,
     rendererCSS3D,
-    controls;
+    controls,
+    holding;
+const cssScale = 50 // scaling factor for html/css elements
 
-const cssScale = 10 // scaling factor for html/css elements
+
 init();
+// OBJECTS //
 
-// objects //
-
-const geometry = new THREE.BoxGeometry(2, 2, 2);
+    // webgl //
+const geometry = new THREE.BoxGeometry(2, 2, 2); // CONTROL CUBE
 const material = new THREE.MeshBasicMaterial( { color: 0xbfc908 } ); //4d4d4d grey //bfc908 yellow
 const cube = new THREE.Mesh( geometry, material );
 scene.add(cube);
 
-// CSS3D elements //
-
+    // css3d //
 let element = document.createElement( 'div' );
-element.setAttribute("class", "cubeface"); // 20px = 10 * box value of that number
+element.setAttribute("class", "htmlplate"); // 20px = 10 * box value of that number
 element.innerHTML = `
-    <button type="button" class="labeltext"
-            onclick="location.href = '/';">
+    <button type="button" class="html" onclick="location.href = '/';">
         Click Here</br>for homepage
     </button>
 `;
@@ -56,18 +56,38 @@ css3d.position.y = 0;
 css3d.position.z = 15;
 sceneCSS.add(css3d);
 
-// events //
+// EVENTS //
 
-document.addEventListener('mousemove', onMouseMove, false);
 let target = new THREE.Vector3();
 let mouseX = 0;
 let mouseY = 0;
+document.addEventListener('mousemove', function(e) {
+    mouseX = ( e.clientX / window.innerWidth ) * 2 - 1;
+    mouseY = - ( e.clientY / window.innerHeight ) * 2 + 1;
 
-window.addEventListener( 'resize', onWindowResize, false );
+    if (holding == true) {
+        resetView();
+    }
+});
 
-camera.position.z = 6;
+window.addEventListener( 'resize', function(e) {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    rendererWEBGL.setSize(window.innerWidth, window.innerHeight);
+    rendererCSS3D.setSize(window.innerWidth, window.innerHeight);
+});
+
+
+window.addEventListener( 'mousedown', function(e) {
+    holding = true;
+});
+window.addEventListener( 'mouseup', function(e) {
+    holding = false;
+});
 
 animate();
+
+// INIT and ANIMATION LOOP //
 
 function init() {
     // core THREE.js //
@@ -77,10 +97,10 @@ function init() {
     scene.fog = new THREE.Fog( new THREE.Color( 0x1a1a1a), 0, 10)
 
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera.position.z = 6;
 
     rendererWEBGL = new THREE.WebGLRenderer( { alpha: true } );
     rendererWEBGL.setSize( window.innerWidth, window.innerHeight );
-    rendererWEBGL.setClearColor( 0x000000, 0 );
     document.getElementById('webgl').appendChild( rendererWEBGL.domElement );
 
     rendererCSS3D = new CSS3DRenderer();
@@ -93,41 +113,6 @@ function init() {
     controls.panSpeed = 5;
     controls.rotateSpeed = 5;
     controls.dynamicDampingFactor = 0.04; // MAKE IT SO ONMOUSEDOWN THIS IS MORE, LIKE .1 or .15
-}
-
-function onMouseMove(event) {
-    mouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    rendererWEBGL.setSize(window.innerWidth, window.innerHeight);
-    rendererCSS3D.setSize(window.innerWidth, window.innerHeight);
-}
-
-function affixtext(textObj, blockObj) {
-    // get midpoint + rotation matrix of front face and move / rotate the text obj
-    let transformMatrix = blockObj.matrix;
-    let z = blockObj.geometry.parameters.depth;
-    
-    textObj.position.set(0,0,(z / 2) * cssScale);
-    textObj.position.applyMatrix4(transformMatrix);
-    textObj.lookAt(blockObj.position);
-}
-
-function affixlabeltext(labelObj, blockObj) { // THIS IMPLIES NO CONTROLS CUZ IT SCREWS IT UP
-
-    // get midpoint of front face
-    let transformMatrix = blockObj.matrix;
-    let z = blockObj.geometry.parameters.depth;
-    
-    labelObj.position.set(0,0,(z / 2) * cssScale);
-    labelObj.scale.set(1,1,1);
-    labelObj.lookAt(camera.position);
-    // labelObj.rotation.set(camera.rotation);
-    labelObj.position.applyMatrix4(transformMatrix);
 }
 
 function animate() { // animate loop
@@ -144,7 +129,6 @@ function update() {
     // target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
     // cube.lookAt(target);
     
-
     affixtext(css3d, cube);
     controls.update();
 }
@@ -154,6 +138,8 @@ function render() {
     rendererCSS3D.render( sceneCSS, camera );
 }
 
+// FUNCTIONS //
+
 function mainRedirect(event) {
     // window.location.href('/threejs')
 }
@@ -161,4 +147,27 @@ function mainRedirect(event) {
 function resetView() {
     camera.up = new THREE.Vector3(0,0,1);
     camera.lookAt(new THREE.Vector3(0,0,0));
+}
+
+function affixtext(textObj, blockObj) {
+    // get midpoint + rotation matrix of front face and move / rotate the text obj
+    let transformMatrix = blockObj.matrix;
+    let z = blockObj.geometry.parameters.depth;
+    
+    textObj.position.set(0,0,(z / 2) * cssScale);
+    textObj.position.applyMatrix4(transformMatrix);
+    textObj.lookAt(blockObj.position);
+}
+
+function affixlabeltext(labelObj, blockObj) { // THIS IMPLIES NO CONTROLS CUZ IT SCREWS IT UP
+    // UNIMPLEMENTED, PERHAPS TRY WITH REGULAR HTML/CSS ELEMENTS AND NOT CSS3D
+    // get midpoint of front face
+    let transformMatrix = blockObj.matrix;
+    let z = blockObj.geometry.parameters.depth;
+    
+    labelObj.position.set(0,0,(z / 2) * cssScale);
+    labelObj.scale.set(1,1,1);
+    labelObj.lookAt(camera.position);
+    // labelObj.rotation.set(camera.rotation);
+    labelObj.position.applyMatrix4(transformMatrix);
 }
