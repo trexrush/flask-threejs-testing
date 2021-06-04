@@ -15,12 +15,19 @@
     display: grid;
     place-items: center;
 }
-
-.html {
+.html { /* all html 3d elements inheret this */
     color: #1a1a1a;
     font-size: 12px;
     padding: 0px;
-    border: .5em solid #000000;
     background: none;
-    /* opacity: .5; */
+}
+
+.textface {
+    border: .5em solid #000000;
+}
+
+.label {
+    font-size: 13px;
+    color: white;
+    opacity: .5;
 }

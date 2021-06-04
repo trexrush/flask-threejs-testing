@@ -38,7 +38,7 @@ scene.add(cube);
 let element = document.createElement( 'div' );
 element.setAttribute("class", "htmlplate"); // 20px = 10 * box value of that number
 element.innerHTML = `
-    <button type="button" class="html" onclick="location.href = '/';">
+    <button type="button" class="html textface" onclick="location.href = '/';">
         Click Here</br>for homepage
     </button>
 `;
@@ -55,6 +55,56 @@ css3d.position.x = 0;
 css3d.position.y = 0;
 css3d.position.z = 15;
 sceneCSS.add(css3d);
+
+let labelF = document.createElement('div');
+let labelR = document.createElement('div');
+let labelU = document.createElement('div');
+let labelB = document.createElement('div');
+let labelL = document.createElement('div');
+let labelD = document.createElement('div');
+labelF.classList.add('html', 'label');
+labelR.classList.add('html', 'label');
+labelU.classList.add('html', 'label');
+labelB.classList.add('html', 'label');
+labelL.classList.add('html', 'label');
+labelD.classList.add('html', 'label');
+labelF.innerHTML = 'Front';
+labelR.innerHTML = 'Right';
+labelU.innerHTML = 'Upper';
+labelB.innerHTML = 'Back';
+labelL.innerHTML = 'Left';
+labelD.innerHTML = 'Down';
+
+const f = new CSS3DObject( labelF );
+f.scale.set(-1,1,1);
+f.position.set(0,0,120);
+
+const r = new CSS3DObject( labelR );
+r.scale.set(-1,1,1);
+r.position.set(0,0,0);
+
+const u = new CSS3DObject( labelU );
+u.scale.set(-1,1,1);
+u.position.set(0,0,0);
+
+const b = new CSS3DObject( labelB );
+b.scale.set(-1,1,1);
+b.position.set(0,0,0);
+
+const l = new CSS3DObject( labelL );
+l.scale.set(-1,1,1);
+l.position.set(0,0,0);
+
+const d = new CSS3DObject( labelD );
+d.scale.set(-1,1,1);
+d.position.set(0,0,0);
+
+sceneCSS.add(f);
+sceneCSS.add(r);
+sceneCSS.add(u);
+sceneCSS.add(b);
+sceneCSS.add(l);
+sceneCSS.add(d);
 
 // EVENTS //
 
@@ -123,13 +173,14 @@ function animate() { // animate loop
 animate();
 
 function update() {
-
-    // target.x += ( mouseX - target.x ) * .01; // FOLLOW MOUSE
-    // target.y += ( mouseY - target.y ) * .01;
-    // target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
-    // cube.lookAt(target);
-    
     affixtext(css3d, cube);
+    affixlabeltext(f, cube, 'f');
+    affixlabeltext(r, cube, 'r');
+    affixlabeltext(u, cube, 'u');
+    affixlabeltext(b, cube, 'b');
+    affixlabeltext(l, cube, 'l');
+    affixlabeltext(d, cube, 'd');
+
     controls.update();
 }
 
@@ -159,15 +210,51 @@ function affixtext(textObj, blockObj) {
     textObj.lookAt(blockObj.position);
 }
 
-function affixlabeltext(labelObj, blockObj) { // THIS IMPLIES NO CONTROLS CUZ IT SCREWS IT UP
-    // UNIMPLEMENTED, PERHAPS TRY WITH REGULAR HTML/CSS ELEMENTS AND NOT CSS3D
+function affixlabeltext(labelObj, blockObj, side, offsetunits) { // THIS IMPLIES NO CONTROLS CUZ IT SCREWS IT UP
     // get midpoint of front face
     let transformMatrix = blockObj.matrix;
-    let z = blockObj.geometry.parameters.depth;
+    let z = blockObj.geometry.parameters.depth * 1.25;
+    let y = blockObj.geometry.parameters.width * 1.25;
+    let x = blockObj.geometry.parameters.height * 1.25;
     
-    labelObj.position.set(0,0,(z / 2) * cssScale);
+    switch(side) {
+        case 'f':
+            labelObj.position.set(0,0,(z) * cssScale);
+            break;
+        case 'b':
+            labelObj.position.set(0,0,(z) * -cssScale);
+            break;
+            
+        case 'u':
+            labelObj.position.set(0,(y) * cssScale,0);
+            break;
+        case 'd':
+            labelObj.position.set(0,(y) * -cssScale,0);
+            break;
+        case 'l':
+            labelObj.position.set((x) * -cssScale,0,0);
+            break;
+        case 'r':
+            labelObj.position.set((x) * cssScale,0,0);
+            break;
+    }
+
+
     labelObj.scale.set(1,1,1);
     labelObj.lookAt(camera.position);
-    // labelObj.rotation.set(camera.rotation);
+
     labelObj.position.applyMatrix4(transformMatrix);
+    labelObj.quaternion.copy(camera.quaternion);
+
+    // if (follow) { // BROKEN WITH CONTROLS
+    //     followMouse(css3d);
+    //     labelObj.scale.set(-1,1,1);
+    // }
+}
+
+function followMouse (obj) {
+    target.x += ( mouseX - target.x ) * .004; // FOLLOW MOUSE
+    target.y += ( mouseY - target.y ) * .004;
+    target.z = camera.position.z / 10; // assuming the camera is located at ( 0, 0, z );
+    obj.lookAt(target);
 }
